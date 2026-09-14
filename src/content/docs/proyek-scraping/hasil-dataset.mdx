@@ -1,0 +1,54 @@
+---
+title: Hasil Scraping & Dataset Lengkap
+description: Dokumentasi hasil ekstraksi berita Detikcom Sport dan Finance, tabel interaktif 778 artikel, serta tautan unduh CSV dan JSON.
+---
+
+import DatasetExplorer from '../../../components/DatasetExplorer.astro';
+
+Halaman ini menyajikan keseluruhan dataset hasil penambangan data berita pada kanal **Detik Sport** dan **Detik Finance**. Anda dapat mencari, menelusuri artikel per halaman, membaca isi berita utuh, serta mengunduh berkas mentah (CSV/JSON).
+
+---
+
+## Ringkasan Ekstraksi Dataset
+
+| Parameter | Keterangan |
+| :--- | :--- |
+| **Sumber Portal Berita** | Detikcom (`https://sport.detik.com` & `https://finance.detik.com`) |
+| **Cakupan Halaman** | Masing-masing 20 halaman indeks (*pagination*) |
+| **Total Artikel Terkumpul** | **778 Artikel** (392 Detik Sport + 386 Detik Finance) |
+| **Atribut yang Diekstrak** | `judul`, `link`, `waktu`, `isi_berita` |
+| **Format Berkas** | CSV (`.csv`) dan JSON (`.json`) |
+| **Integritas Data** | Bebas duplikasi link (*deduplicated*), teks bersih dari tag iklan & script |
+
+---
+
+## Penjelajah Dataset Interaktif (Live Explorer)
+
+Gunakan fitur tabel interaktif di bawah ini untuk mencari judul atau konten artikel, memfilter kategori berita, membaca isi berita secara utuh melalui pop-up, atau mengunduh dataset lengkap.
+
+<DatasetExplorer />
+
+---
+
+## Struktur Kolom & Skema Data
+
+Setiap baris data berita merepresentasikan satu artikel yang diekstrak dengan 4 atribut:
+
+1. **`judul`** (`String`):
+   Judul utama berita yang diekstrak dari tag `h1.detail__title`.
+2. **`link`** (`String / URL`):
+   Tautan permanen (*canonical URL*) yang mengarah ke artikel berita asli di Detikcom.
+3. **`waktu`** (`String`):
+   Tanggal dan jam terbit artikel sebagaimana tercantum pada situs web (contoh: *"Senin, 14 Sep 2026 11:50 WIB"*).
+4. **`isi_berita`** (`String / Text`):
+   Keseluruhan teks berita yang telah dibersihkan dari tag pengganggu (`script`, `style`, `iframe`, iklan, serta widget "baca juga").
+
+---
+
+## Pemanfaatan Lanjutan untuk Web & Text Mining
+
+Dataset berita dengan 778 dokumen ini sangat representatif untuk berbagai tugas pemrosesan bahasa alami (*NLP*) dan penambangan data teks:
+
+- **Klasifikasi Teks (*Supervised Learning*)**: Melatih model klasifikasi seperti *Multinomial Naive Bayes*, *Support Vector Machine (SVM)*, atau *Random Forest* untuk memprediksi apakah suatu artikel termasuk dalam kategori **Olahraga (Sport)** atau **Keuangan (Finance)**.
+- **Ekstraksi Fitur & Pembobotan Kata**: Penerapan representasi teks *Bag of Words* (BoW) dan *Term Frequency - Inverse Document Frequency* (TF-IDF).
+- **Pengelompokan Topik (*Topic Modeling*)**: Menggunakan algoritma *Latent Dirichlet Allocation (LDA)* untuk mengekstrak topik-topik dominan (misalnya topik bursa saham, MotoGP, bulutangkis, atau suku bunga).

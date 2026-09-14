@@ -4,21 +4,35 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://boinkkk.github.io',
+	base: '/ppw',
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Web Mining - Ivan Roisus Salam',
+			defaultLocale: 'root',
+			locales: {
+				root: {
+					label: 'Bahasa Indonesia',
+					lang: 'id',
+				},
+			},
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/Boinkkk/ppw' }
+			],
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Pengantar',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ label: 'Pengantar Web Mining', slug: 'pengantar-web-mining' },
 					],
 				},
 				{
-					label: 'Reference',
-					items: [{ autogenerate: { directory: 'reference' } }],
+					label: 'Proyek Web Scraping',
+					items: [
+						{ label: 'Metodologi & Desain', slug: 'proyek-scraping/metodologi' },
+						{ label: 'Implementasi Kode Scraper', slug: 'proyek-scraping/kode-scraper' },
+						{ label: 'Hasil Scraping & Dataset', slug: 'proyek-scraping/hasil-dataset' },
+					],
 				},
 			],
 		}),

@@ -1,40 +1,56 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Portal Tugas & Web Mining
+description: Dokumentasi Praktikum Web Mining dan Web Scraping Berita Detikcom oleh Ivan Roisus Salam.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: Dokumentasi Pembelajaran Web Mining dan Implementasi Web Scraping Berita Detikcom
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Pengantar Web Mining
+      link: /ppw/pengantar-web-mining/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+    - text: Dokumentasi Scraping
+      link: /ppw/proyek-scraping/metodologi/
+      icon: document
+      variant: secondary
+    - text: Repositori GitHub
+      link: https://github.com/Boinkkk/ppw
       icon: external
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## Profil Mahasiswa
+
+<CardGrid>
+  <Card title="Biodata Mahasiswa" icon="pencil">
+    - **Nama**: Ivan Roisus Salam
+    - **NIM**: 230411200206
+    - **Email**: [Ivanroisussalam1234@gmail.com](mailto:Ivanroisussalam1234@gmail.com)
+    - **Program Studi**: Teknik Informatika
+    - **Instansi**: Universitas Trunojoyo Madura
+  </Card>
+  <Card title="Fokus Proyek" icon="setting">
+    - **Mata Kuliah**: Penambangan Web (Web Mining)
+    - **Implementasi**: Web Scraping Berita Detikcom (Sport & Finance)
+    - **Keluaran Data**: Ekstraksi 4 Atribut (Judul, Link, Waktu, Isi Berita) dalam CSV & JSON
+    - **Metode Keamanan**: Proteksi Anti-Duplikasi (*Zero Redundant Requests*)
+  </Card>
+</CardGrid>
+
+## Eksplorasi Dokumentasi
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+  <Card title="Pengantar Web Mining" icon="open-book">
+    Pelajari konsep dasar penambangan web, karakteristik data web, serta 3 pilar utamanya: *Web Content Mining*, *Web Structure Mining*, dan *Web Usage Mining*.
+  </Card>
+  <Card title="Metodologi Scraping" icon="list-format">
+    Menjelaskan alur penambangan berita dari 2 kategori Detikcom (Sport & Finance) sebanyak masing-masing 20 halaman, ekstraksi 4 atribut, dan optimasi *multi-page article*.
+  </Card>
+  <Card title="Kode Scraper Modular" icon="laptop">
+    Bedah kode Python sederhana dan efisien yang menggunakan `requests` dan `BeautifulSoup`, lengkap dengan mekanisme anti-duplikasi link.
+  </Card>
+  <Card title="Hasil Dataset" icon="document">
+    Melihat struktur data hasil ekstraksi, statistik jumlah berita terkumpul, serta sampel data berita yang berhasil ditambang.
+  </Card>
 </CardGrid>

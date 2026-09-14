@@ -1,19 +1,15 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger workflow ketika ada push ke branch main
   push:
     branches: [ main ]
-  # Memungkinkan trigger manual melalui tab Actions di GitHub
   workflow_dispatch:
 
-# Mengatur izin token GitHub Actions untuk publikasi Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Batasi agar deployment yang berjalan tidak saling tumpang tindih
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -28,11 +24,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 22
 
       - name: Install dependensi
-        run: npm ci
+        run: npm install
 
       - name: Build proyek Astro Starlight
         run: npm run build

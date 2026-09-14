@@ -108,6 +108,15 @@ themeObserver.observe(document.documentElement, { attributes: true, attributeFil
 						{ label: 'Hasil Scraping & Dataset', slug: 'proyek-scraping/hasil-dataset' },
 					],
 				},
+				{
+					label: 'Pipeline Penambangan Teks',
+					items: [
+						{ label: '1. Pembersihan & Preprocessing', slug: 'pipeline/1-preprocessing' },
+						{ label: '2. Ekstraksi Fitur (TF-IDF)', slug: 'pipeline/2-ekstraksi-fitur' },
+						{ label: '3. Reduksi Dimensi (PCA)', slug: 'pipeline/3-reduksi-dimensi' },
+						{ label: '4. Pemodelan & Evaluasi ML', slug: 'pipeline/4-pemodelan-evaluasi' },
+					],
+				},
 			],
 		}),
 	],

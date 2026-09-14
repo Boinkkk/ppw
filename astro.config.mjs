@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig, passthroughImageService } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +10,6 @@ export default defineConfig({
 		service: passthroughImageService(),
 	},
 	integrations: [
-		mermaid(),
 		starlight({
 			title: 'Web Mining - Ivan Roisus Salam',
 			defaultLocale: 'root',
@@ -34,7 +32,9 @@ export default defineConfig({
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
 function renderMermaid() {
-  const elements = document.querySelectorAll('pre.mermaid, pre[data-language="mermaid"], div.expressive-code pre[data-language="mermaid"]');
+  const elements = document.querySelectorAll(
+    'pre.mermaid, pre[data-language="mermaid"], div.expressive-code pre[data-language="mermaid"], pre.language-mermaid'
+  );
   if (elements.length === 0) return;
 
   const isDark = document.documentElement.dataset.theme === 'dark';
@@ -49,7 +49,9 @@ function renderMermaid() {
     if (container.getAttribute('data-mermaid-processed')) return;
     container.setAttribute('data-mermaid-processed', 'true');
 
-    const code = (el.querySelector('code') || el).textContent?.trim() || '';
+    const codeEl = el.querySelector('code') || el;
+    let code = codeEl.innerText || codeEl.textContent || '';
+    code = code.trim();
     if (!code) return;
 
     const id = 'mermaid-svg-' + Math.random().toString(36).slice(2, 9);

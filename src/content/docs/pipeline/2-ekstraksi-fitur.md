@@ -11,14 +11,23 @@ Model pembelajaran mesin (*Machine Learning*) bekerja pada representasi numerik.
 
 TF-IDF merefleksikan seberapa esensial suatu kata ($t$) terhadap dokumen tertentu ($d$) dalam korpus ($D$):
 
-$$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \text{IDF}(t, D)$$
+$$
+\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \text{IDF}(t, D)
+$$
 
 1. **Term Frequency (TF)**:
    Mengukur frekuensi kemunculan term $t$ dalam dokumen $d$. Semakin sering kata tersebut muncul, semakin besar nilainya:
-   $$\text{TF}(t, d) = \frac{f_{t, d}}{\sum_{t' \in d} f_{t', d}}$$
+
+   $$
+   \text{TF}(t, d) = \frac{f_{t, d}}{\sum_{t' \in d} f_{t', d}}
+   $$
+
 2. **Inverse Document Frequency (IDF)**:
    Memberikan bobot penalti (penurunan nilai) terhadap kata-kata yang muncul di hampir semua dokumen, dan memberikan bobot tinggi pada kata-kata spesifik yang hanya muncul di sedikit dokumen:
-   $$\text{IDF}(t, D) = \log\left(\frac{1 + |D|}{1 + |\{d \in D : t \in d\}|}\right) + 1$$
+
+   $$
+   \text{IDF}(t, D) = \log\left(\frac{1 + |D|}{1 + |\{d \in D : t \in d\}|}\right) + 1
+   $$
 
 ---
 

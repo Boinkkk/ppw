@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig, passthroughImageService } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
@@ -8,6 +10,10 @@ export default defineConfig({
 	base: '/ppw',
 	image: {
 		service: passthroughImageService(),
+	},
+	markdown: {
+		remarkPlugins: [remarkMath],
+		rehypePlugins: [rehypeKatex],
 	},
 	integrations: [
 		starlight({
@@ -23,6 +29,13 @@ export default defineConfig({
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/Boinkkk/ppw' }
 			],
 			head: [
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'stylesheet',
+						href: 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
+					},
+				},
 				{
 					tag: 'script',
 					attrs: {
@@ -89,6 +102,14 @@ themeObserver.observe(document.documentElement, { attributes: true, attributeFil
 .mermaid-diagram svg {
   max-width: 100% !important;
   height: auto !important;
+}
+.katex-html svg {
+  height: inherit !important;
+}
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
 }
 					`,
 				},

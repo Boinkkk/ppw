@@ -71,3 +71,12 @@ Berdasarkan nilai rata-rata skor TF-IDF tertinggi pada masing-masing kelas, dipe
 
 > [!TIP]
 > Perbedaan leksikal yang sangat kontras ini membuktikan bahwa teks berita Detik Sport dan Detik Finance memiliki separasi semantik yang kuat (*high discriminatory power*), menjadikannya kandidat ideal untuk klasifikasi linier.
+
+---
+
+## 4. Unduh Dataset Hasil TF-IDF
+
+Dataset hasil pembobotan kata TF-IDF berisikan matriks berdimensi $200 \times 6.486$ lengkap dengan label kategori (`kategori_label`) serta bobot relevansi tiap term leksikal:
+
+- 📥 [Unduh data_tfidf.csv (5,6 MB)](/ppw/data/data_tfidf.csv)
+

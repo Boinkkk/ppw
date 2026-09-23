@@ -43,6 +43,20 @@ Dengan menerapkan `TfidfVectorizer()` dari Scikit-Learn pada 200 artikel yang te
 
 Setiap baris matriks merepresentasikan satu artikel sebagai vektor berdimensi 6.486, di mana tiap elemennya adalah nilai pembobotan TF-IDF untuk kata yang bersangkutan.
 
+### Implementasi Kode Inti TF-IDF (Python)
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
+
+# Pembentukan matriks TF-IDF
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(df['isi_berita_stemmed'].astype(str))
+
+# Konversi ke DataFrame berdimensi (200, 6486)
+df_tfidf = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
+print("Dimensi Matriks TF-IDF:", df_tfidf.shape)
+```
+
 ---
 
 ## 3. Kata Kunci Paling Berpengaruh per Kategori
@@ -69,12 +83,42 @@ Berdasarkan nilai rata-rata skor TF-IDF tertinggi pada masing-masing kelas, dipe
 7. **industri** (manufaktur, ekspor, hilirisasi)
 8. **harga** (harga komoditas, pangan, tarif)
 
+---
+
+## 4. Analisis Frasa N-Gram (Bigram)
+
+Kata tunggal (*unigram*) adakalanya kehilangan konteks spesifik. Dengan mengekstraksi pasangan 2 kata berdampingan (**Bigram**), model dapat menangkap entitas majemuk yang sangat khas:
+
+### Implementasi Kode Inti Ekstraksi Bigram (Python)
+```python
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Ekstraksi frasa 2 kata (Bigram)
+bigram_vec = CountVectorizer(ngram_range=(2, 2))
+bigram_matrix = bigram_vec.fit_transform(df['isi_berita_stemmed'].astype(str))
+df_bigram = pd.DataFrame(bigram_matrix.toarray(), columns=bigram_vec.get_feature_names_out())
+df_bigram['__kategori__'] = df['kategori'].values
+
+# Top 5 Bigram per kategori
+top_bg_sport = df_bigram[df_bigram['__kategori__'] == 'sport'].drop('__kategori__', axis=1).sum().nlargest(5)
+top_bg_finance = df_bigram[df_bigram['__kategori__'] == 'finance'].drop('__kategori__', axis=1).sum().nlargest(5)
+```
+
+### Frasa Bigram Dominan per Kategori:
+| Detik Sport (Frekuensi) | Detik Finance (Frekuensi) |
+| :--- | :--- |
+| 1. **asi games** (99x) | 1. **pupuk indonesia** (94x) |
+| 2. **salah satu** (98x) | 2. **salah satu** (91x) |
+| 3. **juara dunia** (56x) | 3. **rp triliun** (87x) |
+| 4. **jadi bagi** (53x) | 4. **upah minimum** (56x) |
+| 5. **dpd ri** (42x) | 5. **rp miliar** (47x) |
+
 > [!TIP]
-> Perbedaan leksikal yang sangat kontras ini membuktikan bahwa teks berita Detik Sport dan Detik Finance memiliki separasi semantik yang kuat (*high discriminatory power*), menjadikannya kandidat ideal untuk klasifikasi linier.
+> Kehadiran frasa seperti *"juara dunia"* vs *"rp triliun"* dan *"upah minimum"* membuktikan bahwa pemodelan n-gram berhasil mengisolasi jargon domain industri secara otomatis.
 
 ---
 
-## 4. Unduh Dataset Hasil TF-IDF
+## 5. Unduh Dataset Hasil TF-IDF
 
 Dataset hasil pembobotan kata TF-IDF berisikan matriks berdimensi $200 \times 6.486$ lengkap dengan label kategori (`kategori_label`) serta bobot relevansi tiap term leksikal:
 

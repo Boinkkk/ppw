@@ -55,6 +55,38 @@ Menghapus kata-kata fungsional umum Bahasa Indonesia yang memiliki frekuensi tin
 Mengembalikan seluruh kata berimbuhan (awalan, akhiran, sisipan, dan apitan) ke bentuk kata dasarnya. 
 - Contoh: *memenangkan* $\rightarrow$ **menang**, *keuangan* $\rightarrow$ **uang**, *dipertandingkan* $\rightarrow$ **tanding**.
 
+### 2.5 Implementasi Kode Inti Preprocessing (Python)
+
+Berikut adalah potongan kode inti yang digunakan dalam pipeline untuk membersihkan dan menstandarisasi teks berita:
+
+```python
+import re
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+
+# 1. Pembersihan Noise Regex & Case Folding
+def bersihkan_noise_teks(text):
+    text = re.sub(r"\[Gambas:.*?\]", " ", text)                         # Hapus tag embed video
+    text = re.sub(r"(Lihat juga Video:|Baca juga:).*?(\n|$)", " ", text) # Hapus rekomendasi redaksi
+    text = re.sub(r"^[A-Z\s]+-\s*", " ", text)                          # Hapus prefix kota
+    text = re.sub(r"detikcom|detikSport|detikFinance", " ", text, flags=re.IGNORECASE)
+    text = text.lower()                                                 # Case folding
+    text = re.sub(r"[^a-z\s]", " ", text)                               # Hapus simbol & angka
+    return re.sub(r"\s+", " ", text).strip()
+
+# 2. Stopword Removal & Morphological Stemming (Sastrawi)
+stopword_remover = StopWordRemoverFactory().create_stop_word_remover()
+stemmer = StemmerFactory().create_stemmer()
+
+def stopword_dan_stemming(text):
+    text = stopword_remover.remove(text)
+    return stemmer.stem(text)
+
+# Eksekusi pipeline pada korpus
+df['isi_berita_clean'] = df['isi_berita'].apply(bersihkan_noise_teks)
+df['isi_berita_stemmed'] = df['isi_berita_clean'].apply(stopword_dan_stemming)
+```
+
 ---
 
 ## 3. Hasil & Rekapitulasi Reduksi Teks

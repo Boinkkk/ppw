@@ -1,6 +1,6 @@
 ---
 title: Pemodelan Machine Learning & Evaluasi Komparatif
-description: Evaluasi performa 5 model Machine Learning (Naive Bayes, Logistic Regression, Linear SVM, Random Forest, dan KNN) yang diuji secara komparatif pada fitur TF-IDF vs PCA lengkap dengan Stratified 5-Fold Cross Validation.
+description: Evaluasi performa 5 model Machine Learning (Naive Bayes, Logistic Regression, Linear SVM, Random Forest, dan KNN) yang diuji secara komparatif pada fitur TF-IDF vs PCA lengkap dengan Stratified 5-Fold Cross Validation dan visualisasi grafik perbandingan.
 ---
 
 Tahap pemodelan bertujuan untuk membangun sistem cerdas yang mampu mengklasifikasikan artikel berita secara otomatis (*Sport* atau *Finance*) berdasarkan fitur teks hasil ekstraksi.
@@ -41,18 +41,18 @@ Lima algoritma dari berbagai paradigma pembelajaran mesin diuji secara komparati
 
 Berikut adalah potongan kode inti yang menjalankan pelatihan 5 model pada fitur TF-IDF dan PCA secara otomatis:
 
-```python
+```python title="evaluasi_model.py"
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score
 from sklearn.naive_bayes import MultinomialNB, GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score
 
 # Pembagian data latih (80%) dan uji (20%) berstrata
-X_train_tf, X_test_tf, y_train, y_test = train_test_split(X_tfidf, y, test_size=0.2, random_state=42, stratify=y)
-X_train_pca, X_test_pca, _, _ = train_test_split(X_pca, y, test_size=0.2, random_state=42, stratify=y)
+X_tr_tf, X_te_tf, y_tr, y_te = train_test_split(X_tfidf, y, test_size=0.2, random_state=42, stratify=y)
+X_tr_pc, X_te_pc, _, _ = train_test_split(X_pca, y, test_size=0.2, random_state=42, stratify=y)
 
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
@@ -61,20 +61,20 @@ model_definitions = [
     ('Logistic Regression', LogisticRegression(random_state=42), LogisticRegression(random_state=42)),
     ('Linear SVM', LinearSVC(random_state=42), LinearSVC(random_state=42)),
     ('Random Forest', RandomForestClassifier(n_estimators=100, random_state=42), RandomForestClassifier(n_estimators=100, random_state=42)),
-    ('K-Nearest Neighbors', KNeighborsClassifier(n_neighbors=5), KNeighborsClassifier(n_neighbors=5))
+    ('KNN', KNeighborsClassifier(n_neighbors=5), KNeighborsClassifier(n_neighbors=5))
 ]
 
 # Pelatihan & Evaluasi Komparatif (10 Konfigurasi)
 results = []
 for name, m_tf, m_pca in model_definitions:
     # 1. Evaluasi pada TF-IDF
-    m_tf.fit(X_train_tf, y_train)
-    acc_tf = accuracy_score(y_test, m_tf.predict(X_test_tf))
+    m_tf.fit(X_tr_tf, y_tr)
+    acc_tf = accuracy_score(y_te, m_tf.predict(X_te_tf))
     cv_tf = cross_val_score(m_tf, X_tfidf, y, cv=cv, scoring='accuracy').mean()
 
     # 2. Evaluasi pada PCA
-    m_pca.fit(X_train_pca, y_train)
-    acc_pca = accuracy_score(y_test, m_pca.predict(X_test_pca))
+    m_pca.fit(X_tr_pc, y_tr)
+    acc_pca = accuracy_score(y_te, m_pca.predict(X_te_pc))
     cv_pca = cross_val_score(m_pca, X_pca, y, cv=cv, scoring='accuracy').mean()
 
     results.append({'Model': name, 'TF-IDF Acc': acc_tf, 'TF-IDF CV': cv_tf, 'PCA Acc': acc_pca, 'PCA CV': cv_pca})
@@ -82,9 +82,19 @@ for name, m_tf, m_pca in model_definitions:
 
 ---
 
-## 4. Tabel Hasil Komparasi Lengkap (10 Konfigurasi)
+## 4. Visualisasi Grafik Perbandingan Akurasi (TF-IDF vs PCA)
 
-Hasil pengujian pada data uji (40 artikel) dan validasi silang 5-Fold menghasilkan metrik berikut:
+Perbandingan performa akurasi data uji antar ke-5 model machine learning pada kedua representasi fitur divisualisasikan dalam diagram batang komparatif berikut:
+
+![Komparasi Akurasi 5 Model Machine Learning](/ppw/images/model_comparison_bar.png)
+
+Grafik di atas dengan jelas memperlihatkan ketahanan performa model linier (**Linear SVM** dan **Logistic Regression**) yang tetap meraih akurasi sempurna 100% pada kedua skenario fitur.
+
+---
+
+## 5. Tabel Hasil Komparasi Lengkap (10 Konfigurasi)
+
+Hasil pengujian pada data uji (40 artikel) dan validasi silang 5-Fold menghasilkan metrik komparasi berikut:
 
 | Model Machine Learning | TF-IDF Test Acc | TF-IDF 5-Fold CV | TF-IDF F1-Score | PCA Test Acc | PCA 5-Fold CV | PCA F1-Score |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -96,7 +106,7 @@ Hasil pengujian pada data uji (40 artikel) dan validasi silang 5-Fold menghasilk
 
 ---
 
-## 5. Analisis Hasil Komparasi (TF-IDF vs PCA)
+## 6. Analisis Hasil Komparasi (TF-IDF vs PCA)
 
 ```mermaid
 flowchart TD
@@ -115,36 +125,34 @@ flowchart TD
 
 ---
 
-## 6. Confusion Matrix & Laporan Klasifikasi Rinci
+## 7. Confusion Matrix Heatmap & Laporan Klasifikasi Rinci
 
-Hasil evaluasi matriks konfusi untuk model terbaik (**Linear SVM** pada fitur TF-IDF):
+Evaluasi matriks konfusi untuk model terbaik (**Linear SVM** pada fitur TF-IDF) membuktikan tidak adanya kesalahan klasifikasi (*zero false positives* dan *zero false negatives*):
 
-```text
-                   Prediksi Finance    Prediksi Sport
-Aktual Finance            20                  0
-Aktual Sport               0                 20
-```
+![Confusion Matrix Linear SVM](/ppw/images/confusion_matrix_heatmap.png)
 
 ### Laporan Klasifikasi (*Classification Report*):
+
 ```text
-              precision    recall  f1-score   support
+               precision    recall  f1-score   support
 
- Finance (0)       1.00      1.00      1.00        20
-   Sport (1)       1.00      1.00      1.00        20
+  Finance (0)       1.00      1.00      1.00        20
+    Sport (1)       1.00      1.00      1.00        20
 
-    accuracy                           1.00        40
-   macro avg       1.00      1.00      1.00        40
-weighted avg       1.00      1.00      1.00        40
+     accuracy                           1.00        40
+    macro avg       1.00      1.00      1.00        40
+ weighted avg       1.00      1.00      1.00        40
 ```
 
 ---
 
-## 7. Fungsi Prediksi Teks Berita Baru (Interactive Inference)
+## 8. Fungsi Prediksi Teks Berita Baru (Interactive Inference)
 
-Pipeline ini dilengkapi fungsi mandiri yang siap menerima kalimat berita baru, menjalankan preprocessing otomatis, dan mengeluarkan prediksi kategori beserta tingkat keyakinan (*confidence level*):
+Pipeline ini dilengkapi fungsi mandiri yang siap menerima kalimat berita baru, menjalankan preprocessing otomatis, dan mengeluarkan prediksi kategori beserta probabilitas keyakinan (*confidence level*):
 
 ### Implementasi Kode Inti Prediksi Interaktif (Python)
-```python
+
+```python title="prediksi_interaktif.py"
 def prediksi_kategori(teks_input, model=best_model, vectorizer=tfidf_vectorizer):
     # 1. Bersihkan noise & case folding
     clean_text = bersihkan_noise_teks(teks_input)
@@ -169,7 +177,7 @@ def prediksi_kategori(teks_input, model=best_model, vectorizer=tfidf_vectorizer)
 
 ---
 
-## 8. Kesimpulan & Rekomendasi
+## 9. Kesimpulan & Rekomendasi Teknis
 
 1. **Model Terbaik untuk Produksi**:
    **Linear SVM** dan **Logistic Regression** merupakan pilihan paling ideal karena menghasilkan akurasi sempurna (100% pada data uji, 99% pada 5-Fold CV), memiliki waktu komputasi sangat cepat, dan tangguh terhadap *overfitting*.

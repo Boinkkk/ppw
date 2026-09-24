@@ -59,19 +59,24 @@ Mengembalikan seluruh kata berimbuhan (awalan, akhiran, sisipan, dan apitan) ke 
 
 Berikut adalah potongan kode inti yang digunakan dalam pipeline untuk membersihkan dan menstandarisasi teks berita:
 
-```python
+```python title="preprocessing.py"
 import re
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-# 1. Pembersihan Noise Regex & Case Folding
+# 1. Pembersihan noise regex & case folding
 def bersihkan_noise_teks(text):
-    text = re.sub(r"\[Gambas:.*?\]", " ", text)                         # Hapus tag embed video
-    text = re.sub(r"(Lihat juga Video:|Baca juga:).*?(\n|$)", " ", text) # Hapus rekomendasi redaksi
-    text = re.sub(r"^[A-Z\s]+-\s*", " ", text)                          # Hapus prefix kota
+    # Hapus tag embed video & rekomendasi redaksi
+    text = re.sub(r"\[Gambas:.*?\]", " ", text)
+    text = re.sub(r"(Lihat juga Video:|Baca juga:).*?(\n|$)", " ", text)
+    
+    # Hapus prefix kota dan watermark redaksi
+    text = re.sub(r"^[A-Z\s]+-\s*", " ", text)
     text = re.sub(r"detikcom|detikSport|detikFinance", " ", text, flags=re.IGNORECASE)
-    text = text.lower()                                                 # Case folding
-    text = re.sub(r"[^a-z\s]", " ", text)                               # Hapus simbol & angka
+    
+    # Case folding & eliminasi simbol numerik
+    text = text.lower()
+    text = re.sub(r"[^a-z\s]", " ", text)
     return re.sub(r"\s+", " ", text).strip()
 
 # 2. Stopword Removal & Morphological Stemming (Sastrawi)

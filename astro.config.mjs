@@ -133,9 +133,10 @@ themeObserver.observe(document.documentElement, { attributes: true, attributeFil
 					label: 'Pipeline Penambangan Teks',
 					items: [
 						{ label: '1. Pembersihan & Preprocessing', slug: 'pipeline/1-preprocessing' },
-						{ label: '2. Ekstraksi Fitur (TF-IDF)', slug: 'pipeline/2-ekstraksi-fitur' },
+						{ label: '2. Ekstraksi Fitur (TF-IDF & N-Gram)', slug: 'pipeline/2-ekstraksi-fitur' },
 						{ label: '3. Reduksi Dimensi (PCA)', slug: 'pipeline/3-reduksi-dimensi' },
-						{ label: '4. Pemodelan & Evaluasi ML', slug: 'pipeline/4-pemodelan-evaluasi' },
+						{ label: '4. Pengelompokan (K-Means)', slug: 'pipeline/4-clustering' },
+						{ label: '5. Pemodelan & Evaluasi ML', slug: 'pipeline/5-pemodelan-evaluasi' },
 					],
 				},
 			],
